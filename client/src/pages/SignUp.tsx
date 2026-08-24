@@ -1,16 +1,18 @@
 import { useForm } from "react-hook-form"
+import type {SignUpFormData} from "../types/formdata"
 const SignUp = () => {
 
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>()
 
 
-  function submitData() {
-    console.log("dodjodj")
+  function submitData(data:SignUpFormData){
+    console.log("data",data)
+
   }
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-slate-950">
-      <div className="">
-        <form onSubmit={handleSubmit(submitData())} className="bg-slate-100 w-full  flex flex-col justify-center p-10 rounded-md gap-6">
+    <div className="w-full py-8 min-h-screen items-start flex scroll-auto sm:items-center justify-center bg-slate-950">
+      <div className=" w-full max-w-md px-4">
+        <form onSubmit={handleSubmit(submitData)} className="bg-slate-100 w-full  flex flex-col justify-center p-10 rounded-md gap-6">
 
           <div className="flex items-center justify-center flex-col gap-2">
             <h1 className="text-3xl font-bold text-black text-center mb-4">
