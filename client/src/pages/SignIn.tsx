@@ -1,29 +1,25 @@
-import React from "react";
 
 const SignIn = () => {
-
-
-    
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-slate-950">
+    <div className="w-full min-h-screen bg-blue-500 flex items-center justify-center">
       <div className="w-100 min-h-125">
         <form className="bg-slate-700 w-full min-h-125 flex flex-col justify-center p-10 rounded-md gap-6">
-          
-          <h1 className="text-3xl font-bold text-white text-center mb-4">
-            Sign In
+
+          <h1 className="text-3xl font-xl text-black text-center mb-4">
+            Create an Account
           </h1>
 
-          
-
+          <p>
+            Create a account to continue
+          </p>
           {/* Email */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="email"
               className="text-white font-medium"
             >
-              Email
+              Email address
             </label>
-
             <input
               type="email"
               id="email"

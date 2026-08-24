@@ -3,18 +3,23 @@ import React from "react";
 const SignUp = () => {
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-slate-950">
-      <div className="w-[400px] min-h-[500px]">
-        <form className="bg-slate-700 w-full min-h-[500px] flex flex-col justify-center p-10 rounded-md gap-6">
-          
-          <h1 className="text-3xl font-bold text-white text-center mb-4">
-            Sign Up
+      <div className="">
+        <form className="bg-slate-100 w-full  flex flex-col justify-center p-10 rounded-md gap-6">
+
+        <div className="flex items-center justify-center flex-col gap-2">
+            <h1 className="text-3xl font-bold text-black text-center mb-4">
+            Create an Account
           </h1>
 
-          {/* Username */}
+          <p className="text-center text-lg font-semibold">
+            Create a account to continue
+          </p>
+        </div>
+
           <div className="flex flex-col gap-2">
             <label
               htmlFor="username"
-              className="text-white font-medium"
+              className="text-black font-semibold"
             >
               Username
             </label>
@@ -24,17 +29,16 @@ const SignUp = () => {
               id="username"
               name="username"
               placeholder="Enter username"
-              className="w-full px-4 py-3 rounded-md outline-none bg-white text-black"
+              className="w-full px-4 py-3 rounded-md outline-none bg-slate-200 text-black"
             />
           </div>
 
-          {/* Email */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="email"
-              className="text-white font-medium"
+              className="text-black font-semibold "
             >
-              Email
+              Email Address
             </label>
 
             <input
@@ -42,15 +46,14 @@ const SignUp = () => {
               id="email"
               name="email"
               placeholder="Enter email"
-              className="w-full px-4 py-3 rounded-md outline-none bg-white text-black"
+              className="w-full px-4 py-3 rounded-md outline-none bg-slate-200 text-black"
             />
           </div>
 
-          {/* Password */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="password"
-              className="text-white font-medium"
+              className="text-black font-semibold"
             >
               Password
             </label>
@@ -60,7 +63,7 @@ const SignUp = () => {
               id="password"
               name="password"
               placeholder="Enter password"
-              className="w-full px-4 py-3 rounded-md outline-none bg-white text-black"
+              className="w-full px-4 py-3 rounded-md outline-none bg-slate-200 text-black"
             />
           </div>
 
@@ -68,7 +71,7 @@ const SignUp = () => {
             type="submit"
             className="w-full py-3 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
       </div>
