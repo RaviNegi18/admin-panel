@@ -1,20 +1,26 @@
-import React from "react";
-
+import { useForm } from "react-hook-form"
 const SignUp = () => {
+
+  const { register, handleSubmit, formState: { errors } } = useForm()
+
+
+  function submitData() {
+    console.log("dodjodj")
+  }
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-slate-950">
       <div className="">
-        <form className="bg-slate-100 w-full  flex flex-col justify-center p-10 rounded-md gap-6">
+        <form onSubmit={handleSubmit(submitData())} className="bg-slate-100 w-full  flex flex-col justify-center p-10 rounded-md gap-6">
 
-        <div className="flex items-center justify-center flex-col gap-2">
+          <div className="flex items-center justify-center flex-col gap-2">
             <h1 className="text-3xl font-bold text-black text-center mb-4">
-            Create an Account
-          </h1>
+              Create an Account
+            </h1>
 
-          <p className="text-center text-lg font-semibold">
-            Create a account to continue
-          </p>
-        </div>
+            <p className="text-center text-lg font-semibold">
+              Create a account to continue
+            </p>
+          </div>
 
           <div className="flex flex-col gap-2">
             <label
@@ -26,11 +32,17 @@ const SignUp = () => {
 
             <input
               type="text"
-              id="username"
-              name="username"
               placeholder="Enter username"
+              {...register("username", { required: true })}
               className="w-full px-4 py-3 rounded-md outline-none bg-slate-200 text-black"
             />
+            <p className="text-red-500">
+              {
+                errors.username && <p>
+                  please enter username
+                </p>
+              }
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -43,11 +55,22 @@ const SignUp = () => {
 
             <input
               type="email"
-              id="email"
-              name="email"
               placeholder="Enter email"
+              {...register("email", {
+                required: true
+              })}
+
+
               className="w-full px-4 py-3 rounded-md outline-none bg-slate-200 text-black"
             />
+            <p className="text-red-500">
+
+              {
+                errors.email && <p>
+                  error in email
+                </p>
+              }
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -61,11 +84,26 @@ const SignUp = () => {
             <input
               type="password"
               id="password"
-              name="password"
               placeholder="Enter password"
+
+              {...register("password", {
+                required: true
+              })}
               className="w-full px-4 py-3 rounded-md outline-none bg-slate-200 text-black"
             />
+
+            <p className="text-red-500">
+
+              {
+                errors.password && <p>
+
+                  password is required
+                </p>
+              }
+            </p>
           </div>
+
+
 
           <button
             type="submit"
