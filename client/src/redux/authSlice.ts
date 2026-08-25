@@ -13,3 +13,10 @@ return response.data
 return thunkAPI.rejectWithValue(error)
     }
 })
+
+
+const initialState:AuthState={
+    user:null,
+    token:null,
+    loading:false,
+}
