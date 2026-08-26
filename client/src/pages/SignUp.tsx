@@ -1,14 +1,18 @@
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
 import type {SignUpFormData} from "../types/formdata"
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../redux/store";
+import { registerUser } from "../redux/authSlice";
 const SignUp = () => {
-
+  const dispatch=useDispatch<AppDispatch>()
+const navigate=useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>()
 
 
-  function submitData(data:SignUpFormData){
-    console.log("data",data)
-
-  }
+function submitData(data: SignUpFormData) {
+  dispatch(registerUser(data));
+}
   return (
     <div className="w-full py-8 min-h-screen items-start flex scroll-auto sm:items-center justify-center bg-slate-950">
       <div className=" w-full max-w-md px-4">
@@ -112,6 +116,9 @@ const SignUp = () => {
             className="w-full py-3 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
           >
             Sign Up
+          </button>
+            <button onClick={()=>navigate("/")}>
+            signIn
           </button>
         </form>
       </div>

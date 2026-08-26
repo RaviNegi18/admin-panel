@@ -5,7 +5,7 @@ const PORT=5000;
 const app=express()
 connectDB()
 
-app.use("/api",userRoutes)
+app.use("/api/auth",userRoutes)
 
 app.listen(PORT,()=>{
     console.log(`your app is listening on http://localhost:${PORT}`)

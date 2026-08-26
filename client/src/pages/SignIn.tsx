@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { loginUser } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
-import type {AppDispatch} from "../redux/store"
+import { useNavigate } from "react-router-dom";
+import type { AppDispatch } from "../redux/store"
 const SignIn = () => {
-  const dispatch=useDispatch <AppDispatch>()
-  
+  const dispatch = useDispatch<AppDispatch>()
+const navigate=useNavigate()
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-dispatch(loginUser({email,password}))
+    dispatch(loginUser({ email, password }))
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +84,11 @@ dispatch(loginUser({email,password}))
             className="w-full py-3 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
           >
             Sign In
+          </button>
+
+
+          <button onClick={()=>navigate("/sign-up")}>
+            signup
           </button>
         </form>
       </div>

@@ -22,7 +22,7 @@ export const registerUser = createAsyncThunk(
   async (userData: RegisterData, thunkAPI) => {
     try {
       const response = await axios.post(
-        `${API_URI}/register`,
+        `${API_URI}/auth/register`,
         userData
       );
 
@@ -40,7 +40,7 @@ export const loginUser = createAsyncThunk(
   async (userData: LoginData, thunkAPI) => {
     try {
       const response = await axios.post(
-        `${API_URI}/login`,
+        `${API_URI}/auth/login`,
         userData
       );
 
