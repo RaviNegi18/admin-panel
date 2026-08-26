@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { loginUser } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
+import {AppDispatch} from "../redux/store"
 const SignIn = () => {
-  const dispatch=useDispatch()
+  const dispatch=useDispatch <AppDispatch>()
   
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
