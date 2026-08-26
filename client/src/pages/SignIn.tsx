@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
-import {AppDispatch} from "../redux/store"
+import type {AppDispatch} from "../redux/store"
 const SignIn = () => {
   const dispatch=useDispatch <AppDispatch>()
   
