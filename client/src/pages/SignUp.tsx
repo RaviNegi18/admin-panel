@@ -1,17 +1,25 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import type {SignUpFormData} from "../types/formdata"
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../redux/store";
 import { registerUser } from "../redux/authSlice";
 const SignUp = () => {
+  const {success,error,loading}=useSelector((state:RootState)=>state.auth)
   const dispatch=useDispatch<AppDispatch>()
 const navigate=useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>()
 
 
+console.log("sucees====",success)
+
 function submitData(data: SignUpFormData) {
+  console.log("datat===<>",data)
   dispatch(registerUser(data));
+}
+
+if(success){
+  navigate("/")
 }
   return (
     <div className="w-full py-8 min-h-screen items-start flex scroll-auto sm:items-center justify-center bg-slate-950">

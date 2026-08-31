@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userSchema.js"
 import type {Request,Response} from "express"
 export const register = async (req:Request, res:Response) => {
+  console.log("req===>>",req.body)
   try {
     const { username, email, password } = req.body;
 
