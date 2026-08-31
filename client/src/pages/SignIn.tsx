@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { loginUser } from "../redux/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../redux/store"
+import type { RootState } from "../redux/store";
 const SignIn = () => {
   const dispatch = useDispatch<AppDispatch>()
+  const {success,isloading,iserror}=useSelector((state:RootState)=>state.auth)
+
 const navigate=useNavigate()
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -15,6 +18,10 @@ const navigate=useNavigate()
     dispatch(loginUser({ email, password }))
   };
 
+
+  if(success){
+    navigate("/dashboard")
+  }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -83,7 +90,7 @@ const navigate=useNavigate()
             type="submit"
             className="w-full py-3 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
           >
-            Sign In
+         {isloading ? "Loading...." : "SignIn"}
           </button>
 
 

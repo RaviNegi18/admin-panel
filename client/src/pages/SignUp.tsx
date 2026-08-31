@@ -6,12 +6,13 @@ import type { AppDispatch, RootState } from "../redux/store";
 import { registerUser } from "../redux/authSlice";
 const SignUp = () => {
   const {success,error,loading}=useSelector((state:RootState)=>state.auth)
+
   const dispatch=useDispatch<AppDispatch>()
 const navigate=useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>()
 
 
-console.log("sucees====",success)
+
 
 function submitData(data: SignUpFormData) {
   console.log("datat===<>",data)
