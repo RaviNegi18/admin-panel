@@ -2,7 +2,7 @@ type Currency = "CAD" | "USD" | "INR";
 
 
 export interface Product{
-    name:String,
+    name:string,
     price:number,
     currency:Currency
 }
