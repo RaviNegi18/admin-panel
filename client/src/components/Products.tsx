@@ -34,8 +34,8 @@ const Products = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-md">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-lg rounded-lg bg-slate-600 p-6 shadow-md">
         <h1 className="mb-6 text-2xl font-bold text-center">
           Create Product
         </h1>
