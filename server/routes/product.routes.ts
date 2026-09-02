@@ -7,8 +7,8 @@ import {
 
 const router = Router();
 
-router.get("/product", getProduct);
-router.post("/product", createProduct);
-router.get("/product/:id", getProductById);
+router.get("/products", getProduct);
+router.post("/products", createProduct);
+router.get("/products/:id", getProductById);
 
 export default router;

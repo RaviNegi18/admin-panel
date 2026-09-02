@@ -21,12 +21,15 @@ const Products = () => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     // console.log(product);
-    const res = await fetch("http://localhost:5000/api/product", {
+    const res = await fetch("http://localhost:5000/api/products", {
       method: "POST",
+      headers:{
+        'Content-type':"application/json"
+      },
       body: JSON.stringify(product)
     })
 
-    const data=res.json()
+    const data= await res.json()
     console.log("datata",data)
   }
 

@@ -20,16 +20,11 @@ const getProduct = async (req: Request, res: Response) => {
 };
 
 const createProduct = async (req: Request, res: Response) => {
+  console.log("req==----",req.body)
   try {
-    const { name, description, price, currency, stock } = req.body;
+   
 
-    const product = await Product.create({
-      name,
-      description,
-      price,
-      currency,
-      stock,
-    });
+    const product = await Product.create(req.body);
 
     return res.status(201).json({
       success: true,
