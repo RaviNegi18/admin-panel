@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 app.use("/api/auth",userRoutes)
 app.use("/api",productRoutes)
-app.use("/api/payment", paymentRoutes);
+app.use("/api/payment",PaymentRoutes );
 app.listen(PORT,()=>{
     console.log(`your app is listening on http://localhost:${PORT}`)
 })
