@@ -40,6 +40,8 @@ const createPaymentIntent = async (req: Request, res: Response) => {
     await order.save();
 
     // 5. Send clientSecret to frontend
+
+    //the client secret form during payment intent create
     return res.status(200).json({
       success: true,
       message: "PaymentIntent created successfully",
