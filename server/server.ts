@@ -2,6 +2,7 @@ import express from "express"
 import userRoutes from "./../server/routes/auth.routes.js"
 import productRoutes from "./../server/routes/product.routes.ts"
 import connectDB from "./config/DB.ts";
+import orderRoutes from "./routes/order.routes.ts"
 import PaymentRoutes from "./routes/payment.routes.ts"
 import cors from "cors"
 const PORT=5000;
@@ -12,6 +13,7 @@ app.use(cors())
 app.use(express.json())
 app.use("/api/auth",userRoutes)
 app.use("/api",productRoutes)
+app.use("/api",orderRoutes)
 app.use("/api/payment",PaymentRoutes );
 app.listen(PORT,()=>{
     console.log(`your app is listening on http://localhost:${PORT}`)
