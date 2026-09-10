@@ -1,14 +1,58 @@
-import React from "react";
+
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
 
 const Cart = () => {
   const items = useSelector((state: RootState) => state?.cart?.items);
-  console.log("items-------",items)
+
   const total = items?.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleCheckout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please login first");
+        return;
+      }
+
+      const orderItems = items.map((item) => ({
+        productId: item._id,
+        quantity: item.quantity,
+      }));
+
+      const response = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: orderItems,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Failed to create order");
+        return;
+      }
+
+      console.log("Order created:", data.order);
+
+      alert(`Order created successfully: ${data.order._id}`);
+
+      // Next step:
+      // Yahin se hum PaymentIntent create karenge.
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("Something went wrong");
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -26,7 +70,6 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-white px-6 py-10">
       <div className="mx-auto max-w-5xl">
-
         <h1 className="mb-8 text-3xl font-bold">
           Shopping Cart
         </h1>
@@ -71,14 +114,15 @@ const Cart = () => {
         </div>
 
         <button
+          onClick={handleCheckout}
           className="mt-8 w-full rounded-lg bg-blue-600 px-6 py-4 font-semibold hover:bg-blue-700"
         >
           Proceed to Checkout
         </button>
-
       </div>
     </div>
   );
 };
 
 export default Cart;
+
