@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import type {
-  AuthState,
-  RegisterData,
-  LoginData,
-} from "./authTypes";
+import type { AuthState, RegisterData, LoginData } from "./authTypes";
 
 const API_URI = import.meta.env.VITE_API_URL;
 
@@ -21,36 +17,31 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData: RegisterData, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `${API_URI}/auth/register`,
-        userData
-      );
+      const response = await axios.post(`${API_URI}/auth/register`, userData);
 
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Registration failed"
+        error.response?.data?.message || "Registration failed",
       );
     }
-  }
+  },
 );
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData: LoginData, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `${API_URI}/auth/login`,
-        userData
-      );
+      const response = await axios.post(`${API_URI}/auth/login`, userData);
 
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Login failed"
+        error.response?.data?.message || "Login failed",
       );
     }
-  }
+  },
 );
 
 const authSlice = createSlice({
@@ -69,11 +60,11 @@ const authSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
       })
-      
+
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.success=true;
+        state.success = true;
         state.token = action.payload.token;
       })
 
@@ -89,7 +80,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.success=true
+        state.success = true;
         state.token = action.payload.token;
       })
 
