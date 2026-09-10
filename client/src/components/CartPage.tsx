@@ -13,7 +13,7 @@ const Cart = () => {
   const handleCheckout = async () => {
     try {
       const token = localStorage.getItem("token");
-
+      console.log("token======", token)
       if (!token) {
         alert("Please login first");
         return;
