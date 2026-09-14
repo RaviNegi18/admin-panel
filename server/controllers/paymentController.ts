@@ -3,6 +3,10 @@ import stripe from "../config/stripe.ts";
 import Order from "../models/order.ts";
 import Stripe from "stripe";
 
+
+
+// so yha payment intennt or [payment checkout flow hai ye dono ko hum ek dusre ke alternative kah sakte hai yha par but the diff is checkout privide us built in  UI while payment interne me 
+// payment internt me hme khud se custom UI bnana padta hai]
 const createPaymentIntent = async (req: Request, res: Response) => {
   try {
     const { orderId } = req.body;
