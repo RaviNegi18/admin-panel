@@ -36,6 +36,7 @@ const Cart = () => {
       });
 
       const data = await response.json();
+      console.log("datata===========>",data)
 
       if (!response.ok) {
         alert(data.message || "Failed to create order");
