@@ -3,7 +3,11 @@ import stripe from "../config/stripe.ts";
 import Order from "../models/order.ts";
 import Stripe from "stripe";
 
-
+const minimumPaymentAmounts: Record<string, number> = {
+  inr: 5000,
+  usd: 50,
+  cad: 50,
+};
 
 // so yha payment intennt or [payment checkout flow hai ye dono ko hum ek dusre ke alternative kah sakte hai yha par but the diff is checkout privide us built in  UI while payment interne me 
 // payment internt me hme khud se custom UI bnana padta hai]
@@ -29,10 +33,21 @@ const createPaymentIntent = async (req: Request, res: Response) => {
       });
     }
 
+    const currency = order.currency.toLowerCase();
+    const amount = Math.round(order.totalAmount * 100);
+    const minimumAmount = minimumPaymentAmounts[currency];
+
+    if (minimumAmount && amount < minimumAmount) {
+      return res.status(400).json({
+        success: false,
+        message: `Order amount is too small for Stripe. Minimum for ${order.currency} is ${minimumAmount / 100}.`,
+      });
+    }
+
     // 3. Create Stripe PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(order.totalAmount * 100),
-      currency: order.currency.toLowerCase(),
+      amount,
+      currency,
       metadata: {
         orderId: order._id.toString(),
         userId: order.user.toString(),
@@ -143,4 +158,88 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 };
 
 
-export { createPaymentIntent,createCheckoutSession };
+const stripeWebhook = async (req: Request, res: Response) => {
+  const signature = req.headers["stripe-signature"];
+
+  if (!signature) {
+    return res.status(400).json({
+      success: false,
+      message: "Stripe signature is missing",
+    });
+  }
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET as string
+    );
+  } catch (error: unknown) {
+    console.error("Webhook signature verification failed:", error);
+
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Stripe webhook signature",
+    });
+  }
+
+  try {
+    switch (event.type) {
+      case "payment_intent.succeeded": {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+
+        const orderId = paymentIntent.metadata.orderId;
+
+        if (!orderId) {
+          console.error("Order ID missing in PaymentIntent metadata");
+          break;
+        }
+
+        const order = await Order.findById(orderId);
+
+        if (!order) {
+          console.error(`Order not found: ${orderId}`);
+          break;
+        }
+
+        // Idempotency: already paid → don't process again
+        if (order.paymentStatus === "paid") {
+          console.log(`Order ${orderId} is already marked as paid`);
+          break;
+        }
+
+        order.paymentStatus = "paid";
+        order.orderStatus = "confirmed";
+        order.stripePaymentIntentId = paymentIntent.id;
+
+        await order.save();
+
+        console.log(`Order ${orderId} marked as paid`);
+
+        break;
+      }
+
+      default:
+        console.log(`Unhandled Stripe event: ${event.type}`);
+    }
+
+    return res.status(200).json({
+      received: true,
+    });
+  } catch (error: unknown) {
+    console.error("Webhook processing failed:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Webhook processing failed",
+    });
+  }
+};
+
+
+
+
+
+export { createPaymentIntent,createCheckoutSession,stripeWebhook };

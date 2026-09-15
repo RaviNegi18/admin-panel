@@ -10,11 +10,18 @@ const app=express()
 connectDB()
 
 app.use(cors())
+//stripe webhook
+
+app.use(
+    "/api/stripe/webhook",
+    express.raw({type:"application/json"})
+)
 app.use(express.json())
 app.use("/api/auth",userRoutes)
 app.use("/api",productRoutes)
 app.use("/api",orderRoutes)
 app.use("/api/payment",PaymentRoutes );
+app.post("/api/stripe/webhook", stripeWebhook);
 app.listen(PORT,()=>{
     console.log(`your app is listening on http://localhost:${PORT}`)
 })
