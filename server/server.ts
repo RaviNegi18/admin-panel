@@ -5,6 +5,7 @@ import connectDB from "./config/DB.ts";
 import orderRoutes from "./routes/order.routes.ts"
 import PaymentRoutes from "./routes/payment.routes.ts"
 import cors from "cors"
+import { stripeWebhook } from "./controllers/paymentController.ts";
 const PORT=5000;
 const app=express()
 connectDB()
