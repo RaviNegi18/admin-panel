@@ -1,9 +1,13 @@
 
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import type { RootState } from "../redux/store";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const items = useSelector((state: RootState) => state?.cart?.items);
+  const [loading, setLoading] = useState(false);
 
   const total = items?.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -12,8 +16,8 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-      console.log("token======", token)
       if (!token) {
         alert("Please login first");
         return;
@@ -43,15 +47,12 @@ const Cart = () => {
         return;
       }
 
-      console.log("Order created:", data.order);
-
-      alert(`Order created successfully: ${data.order._id}`);
-
-      // Next step:
-      // Yahin se hum PaymentIntent create karenge.
+      navigate("/payment", { state: { orderId: data.order._id } });
     } catch (error) {
       console.error("Checkout error:", error);
       alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,9 +117,10 @@ const Cart = () => {
 
         <button
           onClick={handleCheckout}
-          className="mt-8 w-full rounded-lg bg-blue-600 px-6 py-4 font-semibold hover:bg-blue-700"
+          disabled={loading}
+          className="mt-8 w-full rounded-lg bg-blue-600 px-6 py-4 font-semibold hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Proceed to Checkout
+          {loading ? "Preparing payment..." : "Proceed to Checkout"}
         </button>
       </div>
     </div>
