@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard.tsx'
 import Products from './components/Products.tsx'
 import ProductDetails from "./components/ProductDetails.tsx"
 import Cart from './components/CartPage.tsx'
-import Payment, { PaymentSuccess } from './components/Payment.tsx'
+import Payment, { PaymentCancelled, PaymentSuccess } from './components/Payment.tsx'
 
 const App = () => {
   return (
@@ -18,6 +18,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/cancel" element={<PaymentCancelled />} />
         <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
