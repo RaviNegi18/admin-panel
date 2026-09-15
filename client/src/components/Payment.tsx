@@ -44,9 +44,10 @@ const PaymentForm = () => {
     if (error) {
       setMessage(error.message ?? "Payment failed");
       setLoading(false);
-    } else {
-      navigate("/payment/success");
+      return;
     }
+
+    navigate("/payment/success", { replace: true });
   };
 
   return (
@@ -77,12 +78,14 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const orderId = (location.state as { orderId?: string } | null)?.orderId;
+  const stateOrderId = (location.state as { orderId?: string } | null)?.orderId;
+  const orderId = stateOrderId || localStorage.getItem("lastOrderId");
 
   useEffect(() => {
     const createPaymentIntent = async () => {
       if (!orderId) {
         setErrorMessage("No order found. Please start checkout again.");
+        navigate("/cart", { replace: true });
         return;
       }
 
@@ -115,7 +118,7 @@ const Payment = () => {
     };
 
     createPaymentIntent();
-  }, [orderId]);
+  }, [orderId, navigate]);
 
   if (errorMessage) {
     return (
