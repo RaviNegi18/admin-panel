@@ -7,7 +7,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
@@ -15,7 +15,7 @@ const stripePromise = loadStripe(
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const PaymentForm = () => {
+const PaymentForm = ({ clientSecret }: { clientSecret: string }) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const PaymentForm = () => {
     setLoading(true);
     setMessage("");
 
-    const { error } = await stripe.confirmPayment({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         return_url: `${window.location.origin}/payment/success`,
@@ -47,7 +47,25 @@ const PaymentForm = () => {
       return;
     }
 
-    navigate("/payment/success", { replace: true });
+    if (paymentIntent?.status === "requires_action") {
+      const { error: nextActionError } = await stripe.handleNextAction({
+        clientSecret,
+      });
+
+      if (nextActionError) {
+        setMessage(nextActionError.message ?? "Authentication failed");
+        setLoading(false);
+        return;
+      }
+    }
+
+    if (paymentIntent?.status === "succeeded") {
+      navigate("/payment/success", { replace: true });
+      return;
+    }
+
+    setMessage("Payment is still processing. Please wait a moment.");
+    setLoading(false);
   };
 
   return (
@@ -63,11 +81,35 @@ const PaymentForm = () => {
   );
 };
 
-export const PaymentSuccess = () => (
+export const PaymentSuccess = () => {
+  const [searchParams] = useSearchParams();
+  const redirectStatus = searchParams.get("redirect_status");
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-emerald-400">Payment successful</h1>
+        <p className="mt-3 text-slate-300">
+          {redirectStatus === "succeeded"
+            ? "Your payment was completed successfully."
+            : "Your payment was completed successfully and the order is now confirmed."}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export const PaymentCancelled = () => (
   <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
     <div className="text-center">
-      <h1 className="text-3xl font-bold text-emerald-400">Payment successful</h1>
-      <p className="mt-3 text-slate-300">Your payment was completed successfully.</p>
+      <h1 className="text-3xl font-bold text-amber-400">Payment cancelled</h1>
+      <p className="mt-3 text-slate-300">Your payment was cancelled. You can try again anytime.</p>
+      <button
+        onClick={() => window.location.href = "/cart"}
+        className="mt-6 rounded-lg bg-blue-600 px-5 py-3 font-semibold"
+      >
+        Back to cart
+      </button>
     </div>
   </div>
 );
@@ -151,7 +193,7 @@ const Payment = () => {
         clientSecret,
       }}
     >
-      <PaymentForm />
+      <PaymentForm clientSecret={clientSecret} />
     </Elements>
   );
 };
