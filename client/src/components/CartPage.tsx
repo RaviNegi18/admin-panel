@@ -47,6 +47,7 @@ const Cart = () => {
         return;
       }
 
+      localStorage.setItem("lastOrderId", data.order._id);
       navigate("/payment", { state: { orderId: data.order._id } });
     } catch (error) {
       console.error("Checkout error:", error);
